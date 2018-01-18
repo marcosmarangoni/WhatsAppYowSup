@@ -1,8 +1,0 @@
-test_chatstate_outgoing
-test_chatstate_incoming
-ChatstateProtocolEntity
-chatstate_incoming
-chatstate_outgoing
-IncomingChatstateProtocolEntity
-chatstate
-OutgoingChatstateProtocolEntity

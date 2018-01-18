@@ -1,48 +1,42 @@
-from yowsup.layers.interface                           import YowInterfaceLayer, ProtocolEntityCallback
+from yowsup.layers.interface import YowInterfaceLayer, ProtocolEntityCallback
 from yowsup.layers.protocol_messages.protocolentities  import TextMessageProtocolEntity
-from yowsup.common.tools import Jid
-import threading
-import logging
-logger = logging.getLogger(__name__)
+from yowsup.layers.protocol_messages.protocolentities  import MessageProtocolEntity
 
-class SendLayer(YowInterfaceLayer):
+class EchoLayer(YowInterfaceLayer):
+    @ProtocolEntityCallback("message")
+    def onMessage(self, messageProtocolEntity):
+        messageEntity = TextMessageProtocolEntity(body = messageProtocolEntity.getBody(),
+                                                  _from = messageProtocolEntity.getFrom())
+        print(messageEntity.getBody())
 
-    #This message is going to be replaced by the @param message in YowsupSendStack construction
-    #i.e. list of (jid, message) tuples
-    PROP_MESSAGES = "org.openwhatsapp.yowsup.prop.sendclient.queue"
-    
-    
-    def __init__(self):
-        super(SendLayer, self).__init__()
-        self.ackQueue = []
-        self.lock = threading.Condition()
+        if messageProtocolEntity.getType() == 'text':
+            self.onTextMessage(messageEntity)
+        elif messageProtocolEntity.getType() == 'media':
+            self.onMediaMessage(messageProtocolEntity)
 
-    #call back function when there is a successful connection to whatsapp server
-    @ProtocolEntityCallback("success")
-    def onSuccess(self, successProtocolEntity):
-        self.lock.acquire()
-        for target in self.getProp(self.__class__.PROP_MESSAGES, []):
-            #getProp() is trying to retreive the list of (jid, message) tuples, if none exist, use the default []
-            phone, message = target
-            messageEntity = TextMessageProtocolEntity(message, to = Jid.normalize(phone))
-            #append the id of message to ackQueue list
-            #which the id of message will be deleted when ack is received.
-            self.ackQueue.append(messageEntity.getId())
-            self.toLower(messageEntity)
-        self.lock.release()
+        messageEntity.setBody(messageEntity.getFrom(False) + " -> Esse e um chatbot | ( Sua msg:" + messageEntity.getBody() + ")")
 
-    #after receiving the message from the target number, target number will send a ack to sender(us)
-    @ProtocolEntityCallback("ack")
-    def onAck(self, entity):
-        self.lock.acquire()
-        #if the id match the id in ackQueue, then pop the id of the message out
-        if entity.getId() in self.ackQueue:
-            self.ackQueue.pop(self.ackQueue.index(entity.getId()))
-            
-        if not len(self.ackQueue):
-            self.lock.release()
-            logger.info("Message sent")
-            raise KeyboardInterrupt()
+        self.toLower(messageEntity.forward(messageEntity.getFrom()))
+        self.toLower(messageEntity.ack())
+        self.toLower(messageEntity.ack(True))
 
-        self.lock.release()
+
+    @ProtocolEntityCallback("receipt")
+    def onReceipt(self, entity):
+        self.toLower(entity.ack())
+
+    def onTextMessage(self,messageProtocolEntity):
+        # just print info
+        print("Echoing %s to %s" % (messageProtocolEntity.getBody(), messageProtocolEntity.getFrom(False)))
+
+    def onMediaMessage(self, messageProtocolEntity):
+        # just print info
+        if messageProtocolEntity.getMediaType() == "image":
+            print("Echoing image %s to %s" % (messageProtocolEntity.url, messageProtocolEntity.getFrom(False)))
+
+        elif messageProtocolEntity.getMediaType() == "location":
+            print("Echoing location (%s, %s) to %s" % (messageProtocolEntity.getLatitude(), messageProtocolEntity.getLongitude(), messageProtocolEntity.getFrom(False)))
+
+        elif messageProtocolEntity.getMediaType() == "vcard":
+            print("Echoing vcard (%s, %s) to %s" % (messageProtocolEntity.getName(), messageProtocolEntity.getCardData(), messageProtocolEntity.getFrom(False)))
 

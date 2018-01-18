@@ -1,8 +1,0 @@
-receipt_incoming
-receipt
-test_receipt_incoming
-ReceiptProtocolEntity
-test_receipt_outgoing
-IncomingReceiptProtocolEntity
-receipt_outgoing
-OutgoingReceiptProtocolEntity

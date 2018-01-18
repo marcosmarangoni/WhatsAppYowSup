@@ -1,8 +1,8 @@
-from stack import YowsupSendStack
+from stack import YowsupEchoStack
 
 credentials = ("554196805910","CRR1t/LTW3WifveO/lb4uohQUyQ=")
-messages = [("554199205589","ola tudo bem")]
+messages = [("554199205589","Testando mais uma vez YowSup")]
 
-whats_app = YowsupSendStack(credentials,messages,True)
+whats_app = YowsupEchoStack(credentials,True)
 
 whats_app.start()

@@ -1,6 +1,0 @@
-InMemorySignedPreKeyStore
-InMemoryPreKeyStore
-InMemoryAxolotlStore
-InMemorySessionStore
-InMemoryIdentityKeyStore
-AxolotlStore
