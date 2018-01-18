@@ -2,13 +2,12 @@ from yowsup.layers.interface import YowInterfaceLayer, ProtocolEntityCallback
 from yowsup.layers.protocol_messages.protocolentities  import TextMessageProtocolEntity
 from yowsup.layers.protocol_messages.protocolentities  import MessageProtocolEntity
 
+
 class EchoLayer(YowInterfaceLayer):
     @ProtocolEntityCallback("message")
     def onMessage(self, messageProtocolEntity):
         messageEntity = TextMessageProtocolEntity(body = messageProtocolEntity.getBody(),
                                                   _from = messageProtocolEntity.getFrom())
-        print(messageEntity.getBody())
-
         if messageProtocolEntity.getType() == 'text':
             self.onTextMessage(messageEntity)
         elif messageProtocolEntity.getType() == 'media':
