@@ -1,0 +1,7 @@
+€}qUmembersq}q(UcalculateAgreementq}q(UkindqUfunctionqUvalueq}q	(U	overloadsq
+]q}q(UdocqUprivate+public->sharedUargsq}q(U
+arg_formatqU*Unameqhu}q(hU**qhUkwargsqu†uahUprivate+public->shareduuUcalculateSignatureq}q(hhh}q(h
+]q}q(hU$random+privatekey+message->signatureh}q(hU*hhu}q(hhhhu†uahU$random+privatekey+message->signatureuuUgeneratePrivateKeyq}q(hhh}q(h
+]q}q (hUdata->privateh}q!(hU*hhu}q"(hhhhu†uahUdata->privateuuU__file__q#}q$(hUdataq%h}q&Utypeq']q(U__builtin__q)Ustr†q*asuU__package__q+}q,(hh%h}q-h']q.h)UNoneType†q/asuU__doc__q0}q1(hh%h}q2h']q3h/asuUverifySignatureq4}q5(hhh}q6(h
+]q7}q8(hU"publickey+message+signature->validh}q9(hU*hhu}q:(hhhhu†uahU"publickey+message+signature->validuuU__name__q;}q<(hh%h}q=h']q>h*asuUgeneratePublicKeyq?}q@(hhh}qA(h
+]qB}qC(hUprivate->publich}qD(hU*hhu}qE(hhhhu†uahUprivate->publicuuus.
